@@ -11,6 +11,10 @@ Pour réaliser cette étude, nous avons suivi les étapdes suivantes:
 	<li>Analyse et visualisation des changements</li>
 </ul>
 
+Pour lancé le projet: `python vtk-itk.py`
+
+Nos expérimentations et nos visualisations intérmédiaire se trouvent dans le fichier ***research.ipynb***.
+
 ### Données
 Pour ce projet, nous avions a notre disposition deux scans au format ***.nrrd**.
 La lecture de ces fichiers à été faite avec une méthode similaire à celle vue en TP.
