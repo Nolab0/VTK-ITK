@@ -77,15 +77,37 @@ def segmentation(img, seedX, seedY, seedZ, lower, upper):
 
     rescaleIntensityFilter = itk.RescaleIntensityImageFilter[type_, type_].New()
     rescaleIntensityFilter.SetInput(output_image)
+    rescaleIntensityFilter.SetOutputMinimum(0)
+    rescaleIntensityFilter.SetOutputMaximum(255)
     rescaleIntensityFilter.Update()
 
-    return rescaleIntensityFilter.GetOutput()
+    out = itk.rescale_intensity_image_filter(output_image, output_minimum=0, output_maximum=255)
 
-segmented = segmentation(recalee, 125, 65, 80, 600, 800)
-segmented2 = segmentation(image, 125, 65, 80, 600, 800)
+    return out
 
-itk.imwrite(segmented, "Data/segmented.nrrd")
-itk.imwrite(segmented2, "Data/segmented2.nrrd")
+segmented_before = segmentation(image, 125, 65, 80, 600, 800)
+segmented_after = segmentation(recalee, 125, 65, 80, 600, 800)
+
+def compute_tumor_volume(image):
+    image_type = type(image)
+    statistics_filter = itk.StatisticsImageFilter[image_type].New()
+    statistics_filter.SetInput(image)
+    statistics_filter.Update()
+
+    voxel_volume = image.GetSpacing()[0] * image.GetSpacing()[1] * image.GetSpacing()[2]
+    tumor_volume = statistics_filter.GetSum() * voxel_volume
+
+    return tumor_volume
+
+tumor_volume_before = compute_tumor_volume(segmented_before)
+tumor_volume_after = compute_tumor_volume(segmented_after)
+
+print("Volume de la tumeur sur le scan 1: " + str(tumor_volume_before) + ' mm^3')
+print("Volume de la tumeur sur le scan 2:" + str(tumor_volume_after) + ' mm^3')
+print("Différence de volume entre les deux scans: " + str(tumor_volume_after - tumor_volume_before) + ' mm^3')
+
+itk.imwrite(segmented_before, "Data/segmented.nrrd")
+itk.imwrite(segmented_after, "Data/segmented2.nrrd")
 
 # Create the first reader and set the file name
 reader1 = vtk.vtkNrrdReader()

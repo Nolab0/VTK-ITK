@@ -51,6 +51,17 @@ Afin d'obtenir de bon résultats, nous avons du déterminer les bons paramètres
 </ul>
 
 ![Alt text](image-3.png)
-*Scan2 recalée segmenté | Scan 1 segmenté*
+*Scan2 recalé segmenté | Scan 1 segmenté*
 
 ## Analyse et visualisation
+Dans cette partie, on veut pouvoir obtenir des métriques sur l'évolution de la tumeur entre les deux scans.
+
+Nous avons choisis de calculer le volume de la tumeur dans les 2 scans et d'effectuer la différence. Ce calcul de volume repose sur le nombre de pixels segmentée et le volume correspondant à un pixel en mm³.
+
+Voici nos résultats:
+<ul>
+	<li>Volume de la tumeur scan 1: 290700 mm³</li>
+	<li>Volume de la tumeur scan 1: 315435 mm³</li>
+	<li>Différenc de volume entre les deus scans: 24735 mm³</li>
+</ul>
+On en déduit que la tumeur à augmenté de volume à hauteur de presque 9% entre le scan 1 et le scan 2.
