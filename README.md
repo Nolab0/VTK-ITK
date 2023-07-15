@@ -3,8 +3,8 @@
 
 ## Déroulement du projet
 L'objectif de ce projet était d'effectuer une étude longitudinale d'une tumeur à partir de deux scans du même patient.
-Le but d'une telle étude est de determiner l'évolution d'une tumeur afin de choisir des traitements adaptés.
-Pour réaliser cette étude, nous avons suivi les étapdes suivantes:
+Le but d'une telle étude est de déterminer l'évolution d'une tumeur afin de choisir des traitements adaptés.
+Pour réaliser cette étude, nous avons suivi les étapes suivantes:
 <ul>
 	<li>Recalage des deux scans</li>
 	<li>Segmentation de la tumeur</li>
@@ -13,34 +13,34 @@ Pour réaliser cette étude, nous avons suivi les étapdes suivantes:
 
 Pour lancé le projet: `python vtk-itk.py`
 
-Nos expérimentations et nos visualisations intérmédiaire se trouvent dans le notebook ***research.ipynb***.
+Nos expérimentations et nos visualisations intérmédiaires se trouvent dans le notebook ***research.ipynb***.
 
 ### Données
-Pour ce projet, nous avions a notre disposition deux scans au format ***.nrrd**.
-La lecture de ces fichiers à été faite avec une méthode similaire à celle vue en TP.
+Pour ce projet, nous avions à notre disposition deux scans au format ***.nrrd**.
+La lecture de ces fichiers a été faite avec une méthode similaire à celle vue en TP.
 
-Il est a noté que pour réaliser ce projet, nous nous sommes extensivement basés sur des affichages intermédiaire de la coupe 80 de la vue sagitale. Celle-ci ce situe environ à la moitié du scan et offre une bonne visualisation d'ensemble. Cette coupe a particulièrement été utile pour vérifier nos résultats des prochaines étapes.
+Il est à noter que pour réaliser ce projet, nous nous sommes extensivement basés sur des affichages intermédiaire de la coupe 80 de la vue sagitale. Celle-ci ce situe environ à la moitié du scan et offre une bonne visualisation d'ensemble. Cette coupe a particulièrement été utile pour vérifier nos résultats des prochaines étapes.
 
 ![Alt text](image-1.png)
 *Coupe 80 de la vue sagitale*
 
 ## Recalage
-Etant donné que les deux scans du patient on été réalisés à deux dates différentes, nous devions les recaler entre-eux afin de pouvoir effectuer nos analyses.
+Etant donné que les deux scans du patient ont été réalisés à deux dates différentes, nous devions les recaler entre eux afin de pouvoir effectuer nos analyses.
 
-Nous  avons choisis de recaler le scans ***case6_gre2.nrrd*** sur le sacan ***case6_gre1.nrrd***.
+Nous avons choisis de recaler le scans ***case6_gre2.nrrd*** sur le scan ***case6_gre1.nrrd***.
 
 Pour ce faire, nous avons testé les méthodes de recalage suivantes:
 <ul>
 	<li>B-spline</li>
 	<li>Rigide (translation)</li>
 </ul>
-Nous nous sommes rendu compte que le recalage rigide uniquement avec une translation donnait de très bon résulat de manière rapide. En effet, il semblerait que les deux scans diffèrent à une translation près.
+Nous nous sommes rendu compte que le recalage rigide uniquement avec une translation donnait de très bon résulats de manière rapide. En effet, il semblerait que les deux scans diffèrent à une translation près.
 
 ![Alt text](image-2.png)
 *Scan 1 | Scan 2 | Scan 2 recalé*
 
 ## Segmentation
-L'objectif de cette partie est de séparé la tumeur cérébrale des autres parties de l'image. Pour ce faire, nous avons utilisé la même procédure que celle vu lors des séances de TP.
+L'objectif de cette partie est de séparer la tumeur cérébrale des autres parties de l'image. Pour ce faire, nous avons utilisé la même procédure que celle vu lors des séances de TP.
 
 Afin d'obtenir de bon résultats, nous avons du déterminer les bons paramètres de seuils et de point de départ de notre segmentation. Nous avons utilisé les paramètres suivant pour la segmentation:
 <ul>
@@ -56,12 +56,12 @@ Afin d'obtenir de bon résultats, nous avons du déterminer les bons paramètres
 ## Analyse et visualisation
 Dans cette partie, on veut pouvoir obtenir des métriques sur l'évolution de la tumeur entre les deux scans.
 
-Nous avons choisis de calculer le volume de la tumeur dans les 2 scans et d'effectuer la différence. Ce calcul de volume repose sur le nombre de pixels segmentée et le volume correspondant à un pixel en mm³.
+Nous avons choisis de calculer le volume de la tumeur dans les 2 scans et d'effectuer la différence. Ce calcul de volume repose sur le nombre de pixels segmentés et le volume correspondant à un pixel en mm³.
 
 Voici nos résultats:
 <ul>
 	<li>Volume de la tumeur scan 1: 290700 mm³</li>
 	<li>Volume de la tumeur scan 1: 315435 mm³</li>
-	<li>Différenc de volume entre les deus scans: 24735 mm³</li>
+	<li>Différence de volume entre les deus scans: 24735 mm³</li>
 </ul>
-On en déduit que la tumeur à augmenté de volume à hauteur de presque 9% entre le scan 1 et le scan 2.
+On en déduit que la tumeur a augmenté de volume à hauteur de presque 9% entre le scan 1 et le scan 2.
