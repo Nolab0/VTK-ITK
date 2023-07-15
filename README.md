@@ -13,7 +13,7 @@ Pour réaliser cette étude, nous avons suivi les étapdes suivantes:
 
 Pour lancé le projet: `python vtk-itk.py`
 
-Nos expérimentations et nos visualisations intérmédiaire se trouvent dans le fichier ***research.ipynb***.
+Nos expérimentations et nos visualisations intérmédiaire se trouvent dans le notebook ***research.ipynb***.
 
 ### Données
 Pour ce projet, nous avions a notre disposition deux scans au format ***.nrrd**.
