@@ -81,7 +81,7 @@ def segmentation(img, seedX, seedY, seedZ, lower, upper):
     rescaleIntensityFilter.SetOutputMaximum(255)
     rescaleIntensityFilter.Update()
 
-    out = itk.rescale_intensity_image_filter(output_image, output_minimum=0, output_maximum=255)
+    out = itk.rescale_intensity_image_filter(output_image, output_minimum=0)
 
     return out
 
@@ -103,23 +103,20 @@ tumor_volume_before = compute_tumor_volume(segmented_before)
 tumor_volume_after = compute_tumor_volume(segmented_after)
 
 print("Volume de la tumeur sur le scan 1: " + str(tumor_volume_before) + ' mm^3')
-print("Volume de la tumeur sur le scan 2:" + str(tumor_volume_after) + ' mm^3')
+print("Volume de la tumeur sur le scan 2: " + str(tumor_volume_after) + ' mm^3')
 print("Différence de volume entre les deux scans: " + str(tumor_volume_after - tumor_volume_before) + ' mm^3')
 
 itk.imwrite(segmented_before, "Data/segmented.nrrd")
 itk.imwrite(segmented_after, "Data/segmented2.nrrd")
 
-# Create the first reader and set the file name
 reader1 = vtk.vtkNrrdReader()
 reader1.SetFileName('Data/segmented.nrrd')
 reader1.Update()
 
-# Create the second reader and set the file name
 reader2 = vtk.vtkNrrdReader()
 reader2.SetFileName('Data/segmented2.nrrd')
 reader2.Update()
 
-# Calculate the center of the volumes
 (xMin, xMax, yMin, yMax, zMin, zMax) = reader1.GetExecutive().GetWholeExtent(reader1.GetOutputInformation(0))
 (xSpacing, ySpacing, zSpacing) = reader1.GetOutput().GetSpacing()
 (x0, y0, z0) = reader1.GetOutput().GetOrigin()
@@ -134,7 +131,6 @@ center2 = [x0 + xSpacing * 0.5 * (xMin + xMax),
            y0 + ySpacing * 0.5 * (yMin + yMax),
            z0 + zSpacing * 0.5 * (zMin + zMax)]
 
-# Matrices for axial, coronal, sagittal, oblique view orientations
 axial = vtk.vtkMatrix4x4()
 axial.DeepCopy((1, 0, 0, center1[0],
                 0, 1, 0, center1[1],
@@ -159,29 +155,25 @@ oblique.DeepCopy((1, 0, 0, center1[0],
                   0, 0.5, 0.866025, center1[2],
                   0, 0, 0, 1))
 
-# Extract a slice in the desired orientation for the first file
 reslice1 = vtk.vtkImageReslice()
 reslice1.SetInputConnection(reader1.GetOutputPort())
 reslice1.SetOutputDimensionality(2)
 reslice1.SetResliceAxes(sagittal)
 reslice1.SetInterpolationModeToLinear()
 
-# Extract a slice in the desired orientation for the second file
 reslice2 = vtk.vtkImageReslice()
 reslice2.SetInputConnection(reader2.GetOutputPort())
 reslice2.SetOutputDimensionality(2)
 reslice2.SetResliceAxes(sagittal)
 reslice2.SetInterpolationModeToLinear()
 
-# Create a greyscale lookup table
 table = vtk.vtkLookupTable()
-table.SetRange(0, 2000)  # Image intensity range
-table.SetValueRange(0.0, 1.0)  # From black to white
-table.SetSaturationRange(0.0, 0.0)  # No color saturation
+table.SetRange(0, 2000) 
+table.SetValueRange(0.0, 1.0)
+table.SetSaturationRange(0.0, 0.0)
 table.SetRampToLinear()
 table.Build()
 
-# Map the images through the lookup table
 color1 = vtk.vtkImageMapToColors()
 color1.SetLookupTable(table)
 color1.SetInputConnection(reslice1.GetOutputPort())
@@ -190,37 +182,31 @@ color2 = vtk.vtkImageMapToColors()
 color2.SetLookupTable(table)
 color2.SetInputConnection(reslice2.GetOutputPort())
 
-# Display the first image
 actor1 = vtk.vtkImageActor()
 actor1.GetMapper().SetInputConnection(color1.GetOutputPort())
 
-# Display the second image
 actor2 = vtk.vtkImageActor()
 actor2.GetMapper().SetInputConnection(color2.GetOutputPort())
 
-# Set up the renderers
 renderer1 = vtk.vtkRenderer()
 renderer1.AddActor(actor1)
-renderer1.SetViewport(0.0, 0.0, 0.5, 1.0)  # Display in the left half of the window
+renderer1.SetViewport(0.0, 0.0, 0.5, 1.0) 
 
 renderer2 = vtk.vtkRenderer()
 renderer2.AddActor(actor2)
-renderer2.SetViewport(0.5, 0.0, 1.0, 1.0)  # Display in the right half of the window
+renderer2.SetViewport(0.5, 0.0, 1.0, 1.0)
 
-# Set up the render window
 window = vtk.vtkRenderWindow()
 window.AddRenderer(renderer1)
 window.AddRenderer(renderer2)
-window.SetSize(800, 400)  # Set an appropriate size for the window
+window.SetSize(800, 400)
 
-# Set up the interaction
 interactorStyle = vtk.vtkInteractorStyleImage()
 interactor = vtk.vtkRenderWindowInteractor()
 interactor.SetInteractorStyle(interactorStyle)
 window.SetInteractor(interactor)
 window.Render()
 
-# Create callbacks for slicing the images
 actions = {}
 actions["Slicing"] = 0
 
@@ -259,7 +245,6 @@ interactorStyle.AddObserver("MouseMoveEvent", MouseMoveCallback)
 interactorStyle.AddObserver("LeftButtonPressEvent", ButtonCallback)
 interactorStyle.AddObserver("LeftButtonReleaseEvent", ButtonCallback)
 
-# Start interaction
 interactor.Start()
 del renderer1
 del renderer2
