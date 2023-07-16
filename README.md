@@ -66,9 +66,4 @@ Voici nos résultats:
 </ul>
 On en déduit que la tumeur a augmenté de volume à hauteur de presque 9% entre le scan 1 et le scan 2.
 
-
-Pour ce qui est de la visualisation, nous avons produit deux résultats. Dans l'éxécution du code, la deuxième s'affiche lorsque la premièer est fermée.
-
-La première visualisation produite met en évidence les tumeurs segmentées sur les deux scans sur chaque coupe. Il est possible de se déplacer dans les coupes à l'aide du curseur de la souris.
-
-La deuxième visualisation est une vue d'ensemble du crane du patient avec la tumeur mit en évidnce. Pour activer l'affichage la tumeur du premier scan, il faut presser la touche 'b' et presser la touche 'a' pour la tumeur du second scan. De plus, il est possible de se déplacer dans l'espace à l'aide de la souris.
+La visualisation est une vue d'ensemble du crane du patient avec la tumeur mit en évidence. Pour activer l'affichage de la tumeur du premier scan, il faut presser la touche 'b' (before) et presser la touche 'a' (after) pour la tumeur du second scan. De plus, il est possible de se déplacer dans l'espace à l'aide de la souris.
